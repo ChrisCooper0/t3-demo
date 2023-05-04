@@ -7,7 +7,9 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-import { api, RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
+import Image from "next/image";
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -16,10 +18,13 @@ const CreatePostWizard = () => {
 
   return (
     <div className="flex gap-3">
-      <img
+      <Image
         className="h-16 w-16 w-full rounded-full"
         src={user.profileImageUrl}
         alt="test"
+        width={16}
+        height={16}
+        unoptimized
       />
       <input
         placeholder="Type some emojis"
@@ -36,10 +41,13 @@ const PostView = (props: PostWithUser) => {
 
   return (
     <div key={post.id} className="flex gap-3 border-b border-slate-400 p-4">
-      <img
+      <Image
         className="h-8 w-8 rounded-full"
         src={author.profileImageUrl}
         alt="Author profile picture"
+        width={8}
+        height={8}
+        unoptimized
       />
       <div className="flex flex-col">
         <div className="flex gap-1 text-slate-400">
