@@ -8,6 +8,7 @@ import LoadingPage from "~/components/loading";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 
@@ -16,7 +17,18 @@ const CreatePostWizard = () => {
 
   const [input, setInput] = useState<string>("");
 
-  const { mutate } = api.posts.create.useMutation();
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      // Realtime update of data
+      void ctx.posts.getAll.invalidate();
+    },
+    onError: () => {
+      toast.error("Failed to post. Please try again");
+    },
+  });
 
   if (!user) return null;
 
@@ -36,8 +48,19 @@ const CreatePostWizard = () => {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (input !== "") {
+              mutate({ content: input });
+            }
+          }
+        }}
       />
-      <button onClick={() => mutate({ content: input })}>Post</button>
+      <button onClick={() => mutate({ content: input })} disabled={isPosting}>
+        Post
+      </button>
     </div>
   );
 };
