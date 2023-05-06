@@ -1,17 +1,15 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
-
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 import Image from "next/image";
 import LoadingPage from "~/components/loading";
-import { useState } from "react";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -25,7 +23,7 @@ const CreatePostWizard = () => {
   return (
     <div className="flex gap-3">
       <Image
-        className="h-16 w-16 w-full rounded-full"
+        className="h-16 w-full rounded-full"
         src={user.profileImageUrl}
         alt="test"
         width={16}
